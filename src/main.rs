@@ -4,6 +4,7 @@ mod car;
 mod config;
 mod extra;
 mod physics;
+mod vehicle;
 mod world;
 
 use std::f32::consts::FRAC_PI_4;
@@ -22,13 +23,14 @@ use crate::{
     animal::AnimalPlugin,
     car::components::Car,
     config::world_config::{
-        collision_world_test, empty_world, grass_with_patches, large_grass_test, lots_of_patches,
-        multiple_surface, test_world,
+        collision_world_test, empty_world, grass_with_patches, large_grass_test, multiple_surface,
+        simple_planes_with_flowers, stitching_test_world, test_world,
     },
     physics::{
         PhysicsPlugin,
         components::{Collider, Effect, Gravity, Shape, Velocity},
     },
+    vehicle::VehiclePlugin,
     world::{WorldPlugin, components::TileWorld},
 };
 
@@ -51,12 +53,13 @@ fn main() {
 
     // let static_world = test_world();
     // let static_world = collision_world_test();
-    let static_world = empty_world();
+    // let static_world = empty_world();
 
     // let static_world = large_grass_test();
-    // let static_world = lots_of_patches();
+    // let static_world = stitching_test_world();
 
     // let static_world = grass_with_patches();
+    let static_world = simple_planes_with_flowers();
 
     // let static_world = multiple_surface();
 
@@ -78,6 +81,7 @@ fn main() {
         ))
         .add_systems(Startup, init_rng)
         // .add_plugins(CarPlugin)
+        .add_plugins(VehiclePlugin)
         .add_plugins(WorldPlugin {
             static_world: static_world.clone(),
         })
@@ -87,7 +91,7 @@ fn main() {
         .add_plugins(PhysicsPlugin)
         .add_plugins(PanOrbitCameraPlugin)
         .add_systems(Startup, setup_camera)
-        .add_systems(Startup, test_spawn_physics)
+        // .add_systems(Startup, test_spawn_physics)
         .add_systems(Update, xyz_gismos)
         // .add_systems(Startup, setup_car)
         .add_systems(FixedUpdate, camera_follow)

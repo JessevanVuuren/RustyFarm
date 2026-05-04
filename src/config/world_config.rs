@@ -22,6 +22,82 @@ pub fn empty_world() -> StaticWorld {
     }
 }
 
+pub fn simple_planes_with_flowers() -> StaticWorld {
+    let grass_start = TilePos::new(1, 1);
+    let grass_stop = TilePos::new(7, 7);
+
+    StaticWorld {
+        blocks: vec![
+            WorldBlock {
+                tiletype: TileType::Patches(Noise {
+                    octaves: vec![NoiseLevel {
+                        frequency: 0.31,
+                        amplitude: 1.0,
+                    }],
+                    value_1: vec![WorldModel {
+                        range: Range::Range(1, 8),
+                        comp: Comp::Flower,
+                        path: "nature/flower".into(),
+                        placement: Placement {
+                            scale: Value::Random(0.2, 1.0),
+                            rotation: Rotation::Random(-PI, PI),
+                            ..default()
+                        },
+                        ..default()
+                    }],
+                    value_2: (0.5, 8),
+                }),
+                surface: Surface {
+                    positive: vec![Range::Range(grass_start, grass_stop)],
+                    ..default()
+                },
+            },
+            WorldBlock {
+                tiletype: TileType::Ground(GroundConfig {
+                    color: Noise {
+                        octaves: vec![NoiseLevel {
+                            frequency: 0.01,
+                            amplitude: 1.0,
+                        }],
+                        value_1: Color::linear_rgb(0.0, 0.69, 0.22),
+                        value_2: Color::linear_rgb(0.624, 1.0, 0.745),
+                    },
+                    height: Noise {
+                        octaves: vec![
+                            NoiseLevel {
+                                frequency: 0.1,
+                                amplitude: 1.0,
+                            },
+                            NoiseLevel {
+                                frequency: 5.6,
+                                amplitude: 0.2,
+                            },
+                        ],
+                        value_1: 0.0,
+                        value_2: 0.5,
+                    },
+                    subdivisions: 4,
+                    color_samples: 100,
+                    color_spread: 0.4,
+                    stitch_intensity: 2.0,
+                    stitch_spread: 0.4,
+                    colors: vec![
+                        Color::linear_rgb(0.125, 0.545, 0.227),
+                        Color::linear_rgb(0.145, 0.635, 0.267),
+                        Color::linear_rgb(0.176, 0.776, 0.325),
+                        Color::linear_rgb(0.29, 0.839, 0.427),
+                    ],
+                }),
+                surface: Surface {
+                    positive: vec![Range::Range(grass_start, grass_stop)],
+                    ..default()
+                },
+            },
+        ],
+        animals: vec![],
+    }
+}
+
 pub fn collision_world_test() -> StaticWorld {
     let grass_start = TilePos::new(1, 1);
     let grass_stop = TilePos::new(7, 3);
@@ -323,7 +399,7 @@ pub fn grass_with_patches() -> StaticWorld {
     }
 }
 
-pub fn lots_of_patches() -> StaticWorld {
+pub fn stitching_test_world() -> StaticWorld {
     let dirt_start_patch = TilePos::new(1, 1);
     let dirt_stop_patch = TilePos::new(2, 1);
 
